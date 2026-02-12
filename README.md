@@ -13,12 +13,12 @@ A beautiful iOS-style scroll wheel datepicker component for Vue 3 with TypeScrip
 
 ## ✨ Features
 
-- 🎯 **iOS Native Feel** - Smooth scroll wheel with momentum and snap
+- 🎯 **iOS Native Feel** - 3D cylinder wheel with physics-based momentum scrolling
 - 📱 **Touch Optimized** - Native touch gestures with mouse wheel support
 - 🎨 **Themeable** - Light/dark themes with CSS custom properties
 - 📅 **Multiple Modes** - Date, datetime, time, and year-month pickers
 - 📆 **Date Range** - Support for selecting date ranges
-- 🌍 **Locale Support** - Internationalized month names via Intl API
+- 🌍 **Locale Support** - Internationalized month names via Intl API (with Kazakh fallback)
 - 💪 **TypeScript** - Full TypeScript support with type declarations
 - 🪶 **Lightweight** - ~7KB gzipped with no dependencies
 
@@ -192,6 +192,30 @@ const maxDate = new Date(2030, 11, 31)
 
   <!-- German -->
   <IosDatepicker v-model="date" locale="de" />
+
+  <!-- Kazakh (built-in fallback) -->
+  <IosDatepicker v-model="date" locale="kk" />
+</template>
+```
+
+### Month Format
+
+```vue
+<template>
+  <!-- Long (default): January, February... -->
+  <IosDatepicker v-model="date" month-format="long" />
+
+  <!-- Short: Jan, Feb... -->
+  <IosDatepicker v-model="date" month-format="short" />
+
+  <!-- Narrow: J, F, M... -->
+  <IosDatepicker v-model="date" month-format="narrow" />
+
+  <!-- Numeric: 1, 2, 3... -->
+  <IosDatepicker v-model="date" month-format="numeric" />
+
+  <!-- 2-digit: 01, 02, 03... -->
+  <IosDatepicker v-model="date" month-format="2-digit" />
 </template>
 ```
 
@@ -243,8 +267,9 @@ function resetPicker() {
 | `min`         | `Date`                                           | -            | Minimum selectable date              |
 | `max`         | `Date`                                           | -            | Maximum selectable date              |
 | `locale`      | `string`                                         | `'en'`       | BCP 47 locale for month names        |
+| `monthFormat` | `MonthFormat`                                    | `'long'`     | Month name format                    |
 | `yearRange`   | `[number, number]`                               | `[-50, +50]` | Year range relative to current year  |
-| `itemCount`   | `number`                                         | `5`          | Number of visible items in wheel     |
+| `itemCount`   | `number`                                         | `20`         | Number of items in 3D wheel          |
 | `confirmText` | `string`                                         | `'Confirm'`  | Confirm button text (empty to hide)  |
 | `cancelText`  | `string`                                         | `'Cancel'`   | Cancel button text (empty to hide)   |
 | `theme`       | `'light' \| 'dark' \| ThemeObject`               | `'light'`    | Color theme                          |
@@ -274,6 +299,12 @@ interface DateRange {
   start: Date | null
   end: Date | null
 }
+```
+
+### MonthFormat Type
+
+```typescript
+type MonthFormat = 'long' | 'short' | 'narrow' | 'numeric' | '2-digit'
 ```
 
 ## 📡 Events
@@ -469,13 +500,14 @@ import type {
   DatePickerTheme,
   DatePickerMode,
   DateRange,
+  MonthFormat,
   SelectorOption,
 } from 'vue-ios-style-datepicker'
 ```
 
 ## 📝 License
 
-[MIT](./LICENSE) License © 2024 [Zhumagali Kanagat](https://github.com/wlvck)
+[MIT](./LICENSE) License © 2025 [Zhumagali Kanagat](https://github.com/wlvck)
 
 ## 🤝 Contributing
 

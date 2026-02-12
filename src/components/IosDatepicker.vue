@@ -11,7 +11,7 @@ const props = withDefaults(defineProps<DatePickerProps>(), {
   range: false,
   locale: 'en',
   monthFormat: 'long',
-  itemCount: 5,
+  itemCount: 20,
   confirmText: 'Confirm',
   cancelText: 'Cancel',
   theme: 'light',
@@ -308,6 +308,8 @@ defineExpose({
   overflow: hidden;
   padding: var(--ios-picker-padding);
   gap: var(--ios-picker-column-gap);
+  perspective: 1000px;
+  height: 220px;
 }
 
 /* Column styles */
@@ -315,6 +317,7 @@ defineExpose({
   flex: 1;
   position: relative;
   min-width: 50px;
+  height: 100%;
 }
 
 .ios-datepicker__column--month {

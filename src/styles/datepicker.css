@@ -166,3 +166,106 @@
     var(--ios-picker-mask-end) 100%
   );
 }
+
+/* ============================================================================
+   iOS Selector - 3D Cylinder Wheel Component
+   ============================================================================ */
+
+.ios-selector-wrap {
+  position: relative;
+  height: 100%;
+  text-align: center;
+  overflow: hidden;
+  font-size: var(--ios-picker-font-size);
+  color: var(--ios-picker-text-muted);
+}
+
+.ios-selector-wrap::before,
+.ios-selector-wrap::after {
+  position: absolute;
+  z-index: 1;
+  display: block;
+  content: '';
+  width: 100%;
+  height: 40%;
+  pointer-events: none;
+}
+
+.ios-selector-wrap::before {
+  top: 0;
+  background: linear-gradient(
+    to bottom,
+    var(--ios-picker-mask-start) 20%,
+    var(--ios-picker-mask-end) 100%
+  );
+}
+
+.ios-selector-wrap::after {
+  bottom: 0;
+  background: linear-gradient(
+    to top,
+    var(--ios-picker-mask-start) 20%,
+    var(--ios-picker-mask-end) 100%
+  );
+}
+
+.ios-selector-options {
+  position: absolute;
+  top: 50%;
+  left: 0;
+  width: 100%;
+  height: 0;
+  transform-style: preserve-3d;
+  margin: 0 auto;
+  padding: 0;
+  display: block;
+  list-style: none;
+  -webkit-font-smoothing: subpixel-antialiased;
+  color: var(--ios-picker-text-muted);
+}
+
+.ios-selector-option {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  color: var(--ios-picker-text-color);
+  font-family: var(--ios-picker-font-family);
+  font-weight: var(--ios-picker-font-weight);
+  -webkit-font-smoothing: subpixel-antialiased;
+  backface-visibility: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.ios-selector-highlight {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  left: 0;
+  width: 100%;
+  background-color: var(--ios-picker-highlight-bg);
+  border-top: 0.5px solid var(--ios-picker-highlight-border);
+  border-bottom: 0.5px solid var(--ios-picker-highlight-border);
+  font-size: var(--ios-picker-font-size);
+  overflow: hidden;
+  box-sizing: border-box;
+}
+
+.ios-selector-highlight-list {
+  position: absolute;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.ios-selector-highlight-item {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--ios-picker-selected-color);
+  font-family: var(--ios-picker-font-family);
+  font-weight: var(--ios-picker-font-weight-selected);
+}
