@@ -1,5 +1,5 @@
 {
-  "name": "vue3-ios-datepicker",
+  "name": "vue-ios-style-datepicker",
   "version": "1.0.0",
   "description": "iOS-style scroll wheel datepicker component for Vue 3",
   "type": "module",
