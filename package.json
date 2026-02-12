@@ -3,20 +3,20 @@
   "version": "1.0.0",
   "description": "iOS-style scroll wheel datepicker component for Vue 3",
   "type": "module",
-  "main": "./dist/vue3-ios-datepicker.cjs",
-  "module": "./dist/vue3-ios-datepicker.mjs",
-  "unpkg": "./dist/vue3-ios-datepicker.umd.js",
-  "jsdelivr": "./dist/vue3-ios-datepicker.umd.js",
+  "main": "./dist/vue-ios-style-datepicker.cjs",
+  "module": "./dist/vue-ios-style-datepicker.mjs",
+  "unpkg": "./dist/vue-ios-style-datepicker.umd.js",
+  "jsdelivr": "./dist/vue-ios-style-datepicker.umd.js",
   "types": "./dist/index.d.ts",
   "exports": {
     ".": {
       "types": "./dist/index.d.ts",
-      "import": "./dist/vue3-ios-datepicker.mjs",
-      "require": "./dist/vue3-ios-datepicker.cjs"
+      "import": "./dist/vue-ios-style-datepicker.mjs",
+      "require": "./dist/vue-ios-style-datepicker.cjs"
     },
-    "./dist/style.css": "./dist/vue3-ios-datepicker.css",
-    "./style.css": "./dist/vue3-ios-datepicker.css",
-    "./css": "./dist/vue3-ios-datepicker.css"
+    "./dist/style.css": "./dist/vue-ios-style-datepicker.css",
+    "./style.css": "./dist/vue-ios-style-datepicker.css",
+    "./css": "./dist/vue-ios-style-datepicker.css"
   },
   "sideEffects": [
     "**/*.css"

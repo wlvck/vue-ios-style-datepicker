@@ -46,13 +46,13 @@ export default defineConfig(({ mode }): UserConfig => {
         fileName: (format) => {
           switch (format) {
             case 'es':
-              return 'vue3-ios-datepicker.mjs'
+              return 'vue-ios-style-datepicker.mjs'
             case 'cjs':
-              return 'vue3-ios-datepicker.cjs'
+              return 'vue-ios-style-datepicker.cjs'
             case 'umd':
-              return 'vue3-ios-datepicker.umd.js'
+              return 'vue-ios-style-datepicker.umd.js'
             default:
-              return `vue3-ios-datepicker.${format}.js`
+              return `vue-ios-style-datepicker.${format}.js`
           }
         },
       },
@@ -71,7 +71,7 @@ export default defineConfig(({ mode }): UserConfig => {
           // Asset file naming (CSS)
           assetFileNames: (assetInfo) => {
             if (assetInfo.name === 'style.css') {
-              return 'vue3-ios-datepicker.css'
+              return 'vue-ios-style-datepicker.css'
             }
             return assetInfo.name || 'assets/[name]-[hash][extname]'
           },

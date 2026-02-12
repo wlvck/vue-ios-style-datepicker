@@ -1,7 +1,7 @@
-# vue3-ios-datepicker
+# vue-ios-style-datepicker
 
-[![npm version](https://img.shields.io/npm/v/vue3-ios-datepicker.svg)](https://www.npmjs.com/package/vue3-ios-datepicker)
-[![license](https://img.shields.io/npm/l/vue3-ios-datepicker.svg)](https://github.com/wlvck/vue3-ios-datepicker/blob/main/LICENSE)
+[![npm version](https://img.shields.io/npm/v/vue-ios-style-datepicker.svg)](https://www.npmjs.com/package/vue-ios-style-datepicker)
+[![license](https://img.shields.io/npm/l/vue-ios-style-datepicker.svg)](https://github.com/wlvck/vue3-ios-datepicker/blob/main/LICENSE)
 [![vue](https://img.shields.io/badge/vue-3.x-brightgreen.svg)](https://vuejs.org/)
 [![typescript](https://img.shields.io/badge/typescript-supported-blue.svg)](https://www.typescriptlang.org/)
 
@@ -26,13 +26,13 @@ A beautiful iOS-style scroll wheel datepicker component for Vue 3 with TypeScrip
 
 ```bash
 # npm
-npm install vue3-ios-datepicker
+npm install vue-ios-style-datepicker
 
 # yarn
-yarn add vue3-ios-datepicker
+yarn add vue-ios-style-datepicker
 
 # pnpm
-pnpm add vue3-ios-datepicker
+pnpm add vue-ios-style-datepicker
 ```
 
 ## 🚀 Quick Start
@@ -43,8 +43,8 @@ pnpm add vue3-ios-datepicker
 // main.ts
 import { createApp } from 'vue'
 import App from './App.vue'
-import IosDatepicker from 'vue3-ios-datepicker'
-import 'vue3-ios-datepicker/style.css'
+import IosDatepicker from 'vue-ios-style-datepicker'
+import 'vue-ios-style-datepicker/style.css'
 
 const app = createApp(App)
 app.use(IosDatepicker)
@@ -56,8 +56,8 @@ app.mount('#app')
 ```vue
 <script setup lang="ts">
 import { ref } from 'vue'
-import { IosDatepicker } from 'vue3-ios-datepicker'
-import 'vue3-ios-datepicker/style.css'
+import { IosDatepicker } from 'vue-ios-style-datepicker'
+import 'vue-ios-style-datepicker/style.css'
 
 const selectedDate = ref(new Date())
 </script>
@@ -70,9 +70,12 @@ const selectedDate = ref(new Date())
 ### CDN Usage
 
 ```html
-<link rel="stylesheet" href="https://unpkg.com/vue3-ios-datepicker/dist/vue3-ios-datepicker.css" />
+<link
+  rel="stylesheet"
+  href="https://unpkg.com/vue-ios-style-datepicker/dist/vue-ios-style-datepicker.css"
+/>
 <script src="https://unpkg.com/vue"></script>
-<script src="https://unpkg.com/vue3-ios-datepicker"></script>
+<script src="https://unpkg.com/vue-ios-style-datepicker"></script>
 
 <script>
   const app = Vue.createApp({
@@ -392,7 +395,7 @@ For advanced use cases, you can use the `useDatepicker` composable directly:
 
 ```typescript
 import { ref } from 'vue'
-import { useDatepicker } from 'vue3-ios-datepicker'
+import { useDatepicker } from 'vue-ios-style-datepicker'
 
 const modelValue = ref(new Date())
 
@@ -426,7 +429,7 @@ import {
   parseDate,
   isValidDate,
   clampDate,
-} from 'vue3-ios-datepicker'
+} from 'vue-ios-style-datepicker'
 
 // Generate year options
 const years = getYears(2020, 2030)
@@ -467,7 +470,7 @@ import type {
   DatePickerMode,
   DateRange,
   SelectorOption,
-} from 'vue3-ios-datepicker'
+} from 'vue-ios-style-datepicker'
 ```
 
 ## 📝 License
