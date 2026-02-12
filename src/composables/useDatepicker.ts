@@ -5,6 +5,7 @@ import type {
   IosSelectorInstance,
   ColumnType,
   DatePickerMode,
+  MonthFormat,
 } from '../core/types'
 import { createIosSelector } from '../core/IosSelector'
 import {
@@ -32,6 +33,8 @@ export interface UseDatepickerOptions {
   maxDate?: Ref<Date | undefined>
   /** Locale for month names */
   locale?: Ref<string>
+  /** Month name format */
+  monthFormat?: Ref<MonthFormat>
   /** Year range [start, end] */
   yearRange?: Ref<[number, number] | undefined>
   /** Minute step interval */
@@ -99,6 +102,7 @@ export function useDatepicker(options: UseDatepickerOptions): UseDatepickerRetur
     minDate,
     maxDate,
     locale,
+    monthFormat,
     yearRange,
     minuteStep,
     hourStep,
@@ -148,7 +152,7 @@ export function useDatepicker(options: UseDatepickerOptions): UseDatepickerRetur
   })
 
   const monthOptions = computed<SelectorOption[]>(() => {
-    return getMonths(locale?.value || 'en', 'long')
+    return getMonths(locale?.value || 'en', monthFormat?.value || 'long')
   })
 
   const dayOptions = computed<SelectorOption[]>(() => {

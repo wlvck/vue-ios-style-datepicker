@@ -25,6 +25,27 @@ export function getYears(startYear: number, endYear: number): SelectorOption[] {
 /** @deprecated Use getYears instead */
 export const generateYears = getYears
 
+// Fallback month names for locales not supported by browser
+const FALLBACK_MONTHS: Record<string, { long: string[]; short: string[] }> = {
+  kk: {
+    long: [
+      'Қаңтар',
+      'Ақпан',
+      'Наурыз',
+      'Сәуір',
+      'Мамыр',
+      'Маусым',
+      'Шілде',
+      'Тамыз',
+      'Қыркүйек',
+      'Қазан',
+      'Қараша',
+      'Желтоқсан',
+    ],
+    short: ['Қаң', 'Ақп', 'Нау', 'Сәу', 'Мам', 'Мау', 'Шіл', 'Там', 'Қыр', 'Қаз', 'Қар', 'Жел'],
+  },
+}
+
 /**
  * Generate locale-aware month names
  * @param locale - BCP 47 locale string (default: 'en')
@@ -41,15 +62,40 @@ export function getMonths(
       const label = format === '2-digit' ? String(month + 1).padStart(2, '0') : String(month + 1)
       months.push({ value: month, label })
     }
-  } else {
-    const formatter = new Intl.DateTimeFormat(locale, { month: format })
-    for (let month = 0; month < 12; month++) {
-      const date = new Date(2000, month, 1)
-      months.push({
-        value: month,
-        label: formatter.format(date),
-      })
+    return months
+  }
+
+  // Check for fallback locales (browser may not support all locales)
+  const baseLang = locale.split('-')[0].toLowerCase()
+  const fallback = FALLBACK_MONTHS[baseLang]
+
+  if (fallback) {
+    const formatKey = format === 'long' || format === 'narrow' ? 'long' : 'short'
+    const names = fallback[formatKey]
+
+    // Test if browser actually supports this locale
+    const testFormatter = new Intl.DateTimeFormat(locale, { month: 'long' })
+    const testResult = testFormatter.format(new Date(2000, 0, 1))
+    const enFormatter = new Intl.DateTimeFormat('en', { month: 'long' })
+    const enResult = enFormatter.format(new Date(2000, 0, 1))
+
+    // If browser returned English for non-English locale, use fallback
+    if (testResult === enResult) {
+      for (let month = 0; month < 12; month++) {
+        months.push({ value: month, label: names[month] })
+      }
+      return months
     }
+  }
+
+  // Use Intl.DateTimeFormat
+  const formatter = new Intl.DateTimeFormat(locale, { month: format })
+  for (let month = 0; month < 12; month++) {
+    const date = new Date(2000, month, 1)
+    months.push({
+      value: month,
+      label: formatter.format(date),
+    })
   }
 
   return months

@@ -1,6 +1,9 @@
 // Picker modes
 export type DatePickerMode = 'date' | 'datetime' | 'time' | 'year-month'
 
+// Month name format
+export type MonthFormat = 'long' | 'short' | 'narrow' | 'numeric' | '2-digit'
+
 // Theme configuration
 export interface DatePickerTheme {
   background?: string
@@ -34,6 +37,7 @@ export interface DatePickerProps {
   // Display options
   format?: string
   locale?: string
+  monthFormat?: MonthFormat
   yearRange?: [number, number]
   itemCount?: number
 

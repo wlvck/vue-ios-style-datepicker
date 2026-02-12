@@ -52,8 +52,8 @@ export function createIosSelector(config: IosSelectorConfig): IosSelectorInstanc
     list.innerHTML = ''
 
     if (type === 'infinite') {
-      // Render items for infinite scroll (3x source for seamless looping)
-      const items = [...source, ...source, ...source]
+      // Render items for infinite scroll (5x source for seamless looping)
+      const items = [...source, ...source, ...source, ...source, ...source]
       items.forEach((item, i) => {
         const li = document.createElement('li')
         li.className = 'ios-selector-item'
@@ -101,40 +101,72 @@ export function createIosSelector(config: IosSelectorConfig): IosSelectorInstanc
     currentY = y
   }
 
-  function getIndexFromPosition(y: number): number {
-    const offset = type === 'infinite' ? source.length : 0
-    return Math.round(-y / itemHeight) + offset
-  }
-
-  function getPositionFromIndex(index: number): number {
-    const offset = type === 'infinite' ? source.length : 0
-    return -(index - offset) * itemHeight
-  }
-
-  function normalizeIndex(index: number): number {
+  // For infinite mode: get the source index (0 to source.length-1) from current position
+  function getSourceIndexFromPosition(y: number): number {
     if (type === 'infinite') {
+      // Calculate which item is at the highlight position
+      // Highlight is at halfCount * itemHeight from top
+      // Item at DOM index i is at (i * itemHeight + y) from top
+      // For item at highlight: i * itemHeight + y = halfCount * itemHeight
+      // i = halfCount - y / itemHeight
+      const domIndex = Math.round(halfCount - y / itemHeight)
+      // Normalize to source index (handle negative values too)
       const len = source.length
-      return ((index % len) + len) % len
+      return ((domIndex % len) + len) % len
+    } else {
+      // Normal mode: account for padding
+      const index = Math.round(-y / itemHeight)
+      return Math.max(0, Math.min(index, source.length - 1))
     }
-    return Math.max(0, Math.min(index, source.length - 1))
+  }
+
+  // For infinite mode: get position that places source index at highlight
+  function getPositionFromSourceIndex(index: number): number {
+    if (type === 'infinite') {
+      // Place the item from the middle set (set index 2 out of 0,1,2,3,4) at highlight
+      // Middle set starts at DOM index 2 * source.length
+      const middleSetStart = 2 * source.length
+      const domIndex = middleSetStart + index
+      // Position so this domIndex is at highlight
+      // domIndex * itemHeight + y = halfCount * itemHeight
+      // y = (halfCount - domIndex) * itemHeight
+      return (halfCount - domIndex) * itemHeight
+    } else {
+      return -index * itemHeight
+    }
+  }
+
+  function wrapToMiddleSet() {
+    if (type !== 'infinite') return
+
+    const setHeight = source.length * itemHeight
+    // Middle set (set 2) position range
+    const middleSetStart = (halfCount - 2 * source.length) * itemHeight
+    const middleSetEnd = middleSetStart - setHeight
+
+    // If we've scrolled more than 1 set away from middle, wrap back
+    if (currentY > middleSetStart + setHeight) {
+      // Scrolled too far up (into set 0 or 1)
+      currentY -= setHeight * Math.floor((currentY - middleSetStart) / setHeight + 0.5)
+      list.style.transition = 'none'
+      list.style.transform = `translateY(${currentY}px)`
+    } else if (currentY < middleSetEnd - setHeight) {
+      // Scrolled too far down (into set 3 or 4)
+      currentY += setHeight * Math.floor((middleSetEnd - currentY) / setHeight + 0.5)
+      list.style.transition = 'none'
+      list.style.transform = `translateY(${currentY}px)`
+    }
   }
 
   function snapToNearest() {
-    const rawIndex = getIndexFromPosition(currentY)
-    const normalizedIndex = normalizeIndex(rawIndex)
-    currentIndex = normalizedIndex
+    const sourceIndex = getSourceIndexFromPosition(currentY)
+    currentIndex = sourceIndex
 
-    if (type === 'infinite') {
-      // Reset position to middle set for seamless looping
-      const targetY = getPositionFromIndex(source.length + normalizedIndex)
-      setPosition(targetY, true)
-    } else {
-      const targetY = getPositionFromIndex(normalizedIndex)
-      setPosition(targetY, true)
-    }
+    const targetY = getPositionFromSourceIndex(sourceIndex)
+    setPosition(targetY, true)
 
-    if (onChange && source[normalizedIndex]) {
-      onChange(source[normalizedIndex])
+    if (onChange && source[sourceIndex]) {
+      onChange(source[sourceIndex])
     }
   }
 
@@ -158,6 +190,8 @@ export function createIosSelector(config: IosSelectorConfig): IosSelectorInstanc
         currentY = minY
         velocity = 0
       }
+    } else {
+      wrapToMiddleSet()
     }
 
     setPosition(currentY)
@@ -182,6 +216,7 @@ export function createIosSelector(config: IosSelectorConfig): IosSelectorInstanc
     velocity = touchY - lastY
     lastY = touchY
     currentY += deltaY
+    wrapToMiddleSet()
     setPosition(currentY)
   }
 
@@ -207,6 +242,8 @@ export function createIosSelector(config: IosSelectorConfig): IosSelectorInstanc
       const minY = -(source.length - 1) * itemHeight
       const maxY = 0
       currentY = Math.max(minY, Math.min(maxY, currentY))
+    } else {
+      wrapToMiddleSet()
     }
 
     setPosition(currentY)
@@ -226,7 +263,7 @@ export function createIosSelector(config: IosSelectorConfig): IosSelectorInstanc
     const index = source.findIndex((s) => s.value === config.value)
     if (index !== -1) {
       currentIndex = index
-      const initialY = getPositionFromIndex(type === 'infinite' ? source.length + index : index)
+      const initialY = getPositionFromSourceIndex(index)
       setPosition(initialY)
     }
   }
@@ -242,7 +279,7 @@ export function createIosSelector(config: IosSelectorConfig): IosSelectorInstanc
       const index = source.findIndex((s) => s.value === value)
       if (index !== -1) {
         currentIndex = index
-        const targetY = getPositionFromIndex(type === 'infinite' ? source.length + index : index)
+        const targetY = getPositionFromSourceIndex(index)
         setPosition(targetY, true)
       }
     },
@@ -258,11 +295,11 @@ export function createIosSelector(config: IosSelectorConfig): IosSelectorInstanc
       // Re-select current value if still exists
       const index = source.findIndex((s) => s.value === currentIndex)
       if (index !== -1) {
-        const targetY = getPositionFromIndex(type === 'infinite' ? source.length + index : index)
+        const targetY = getPositionFromSourceIndex(index)
         setPosition(targetY)
       } else {
         currentIndex = 0
-        setPosition(getPositionFromIndex(type === 'infinite' ? source.length : 0))
+        setPosition(getPositionFromSourceIndex(0))
       }
     },
 
