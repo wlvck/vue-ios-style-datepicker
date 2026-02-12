@@ -1,0 +1,86 @@
+# ============================================
+# Files excluded from npm package
+# Only dist/, README.md, and LICENSE are published
+# ============================================
+
+# Source files (dist is published instead)
+src/
+
+# Demo and examples
+demo/
+examples/
+
+# Development configuration
+.vscode/
+.idea/
+*.code-workspace
+.editorconfig
+
+# Build configuration
+vite.config.ts
+tsconfig.json
+tsconfig.node.json
+eslint.config.js
+.eslintrc*
+.prettierrc
+.prettierignore
+
+# Git hooks
+.husky/
+
+# Dependencies (installed by user)
+node_modules/
+
+# Git
+.git/
+.gitignore
+.gitattributes
+
+# Tests
+__tests__/
+test/
+tests/
+*.test.ts
+*.spec.ts
+*.test.js
+*.spec.js
+coverage/
+.nyc_output/
+jest.config.*
+vitest.config.*
+
+# Documentation source (README.md is kept)
+docs/
+
+# CI/CD
+.github/
+.gitlab-ci.yml
+.travis.yml
+azure-pipelines.yml
+Jenkinsfile
+.circleci/
+
+# Logs
+*.log
+logs/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Package files
+*.tgz
+
+# Environment
+.env
+.env.*
+
+# TypeScript build cache
+*.tsbuildinfo
+
+# Misc development files
+CONTRIBUTING.md
+CHANGELOG.md
+SECURITY.md
+.nvmrc
+.node-version

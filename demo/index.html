@@ -1,0 +1,573 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>vue3-ios-datepicker Demo</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: #f5f5f7;
+      min-height: 100vh;
+      padding: 20px;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    header {
+      text-align: center;
+      padding: 40px 20px;
+    }
+
+    header h1 {
+      font-size: 2.5rem;
+      font-weight: 700;
+      color: #1d1d1f;
+      margin-bottom: 10px;
+    }
+
+    header p {
+      font-size: 1.1rem;
+      color: #6e6e73;
+    }
+
+    .demos {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+      gap: 24px;
+      padding: 20px 0;
+    }
+
+    .demo-card {
+      background: #ffffff;
+      border-radius: 16px;
+      padding: 24px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    }
+
+    .demo-card h3 {
+      font-size: 1.25rem;
+      font-weight: 600;
+      color: #1d1d1f;
+      margin-bottom: 8px;
+    }
+
+    .demo-card p {
+      font-size: 0.9rem;
+      color: #6e6e73;
+      margin-bottom: 16px;
+    }
+
+    .demo-card .picker-container {
+      margin-bottom: 16px;
+    }
+
+    .demo-card .output {
+      background: #f5f5f7;
+      border-radius: 8px;
+      padding: 12px;
+      font-family: 'SF Mono', Monaco, monospace;
+      font-size: 0.85rem;
+      color: #1d1d1f;
+      word-break: break-all;
+    }
+
+    .demo-card .output label {
+      display: block;
+      font-size: 0.75rem;
+      color: #6e6e73;
+      margin-bottom: 4px;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    }
+
+    /* Dark theme card */
+    .demo-card.dark {
+      background: #1c1c1e;
+    }
+
+    .demo-card.dark h3,
+    .demo-card.dark p {
+      color: #f5f5f7;
+    }
+
+    .demo-card.dark .output {
+      background: #2c2c2e;
+      color: #f5f5f7;
+    }
+
+    .demo-card.dark .output label {
+      color: #98989d;
+    }
+
+    /* Custom theme card */
+    .custom-theme-picker {
+      --ios-picker-background: #e8f5e9;
+      --ios-picker-text-color: #1b5e20;
+      --ios-picker-highlight-border: #4caf50;
+      --ios-picker-mask-start: rgba(232, 245, 233, 1);
+      --ios-picker-mask-end: rgba(232, 245, 233, 0);
+      --ios-picker-btn-color: #4caf50;
+      --ios-picker-btn-confirm-bg: #4caf50;
+    }
+
+    /* Buttons row */
+    .button-row {
+      display: flex;
+      gap: 8px;
+      margin-top: 12px;
+    }
+
+    .btn {
+      flex: 1;
+      padding: 10px 16px;
+      border: none;
+      border-radius: 8px;
+      font-size: 0.9rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: opacity 0.2s;
+    }
+
+    .btn:hover {
+      opacity: 0.8;
+    }
+
+    .btn-primary {
+      background: #007aff;
+      color: white;
+    }
+
+    .btn-secondary {
+      background: #e5e5ea;
+      color: #1d1d1f;
+    }
+
+    footer {
+      text-align: center;
+      padding: 40px 20px;
+      color: #6e6e73;
+      font-size: 0.9rem;
+    }
+
+    footer a {
+      color: #007aff;
+      text-decoration: none;
+    }
+
+    footer a:hover {
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body>
+  <div id="app">
+    <div class="container">
+      <header>
+        <h1>🗓️ vue3-ios-datepicker</h1>
+        <p>iOS-style scroll wheel datepicker for Vue 3</p>
+      </header>
+
+      <div class="demos">
+        <!-- Basic Date Picker -->
+        <div class="demo-card">
+          <h3>Basic Date Picker</h3>
+          <p>Default date picker with month, day, and year wheels.</p>
+          <div class="picker-container">
+            <ios-datepicker
+              v-model="basicDate"
+              :confirm-text="''"
+              :cancel-text="''"
+            ></ios-datepicker>
+          </div>
+          <div class="output">
+            <label>Selected:</label>
+            {{ formatDate(basicDate) }}
+          </div>
+        </div>
+
+        <!-- DateTime Picker -->
+        <div class="demo-card">
+          <h3>DateTime Picker</h3>
+          <p>Date and time selection with 24-hour format.</p>
+          <div class="picker-container">
+            <ios-datepicker
+              v-model="dateTimeValue"
+              mode="datetime"
+              :confirm-text="''"
+              :cancel-text="''"
+            ></ios-datepicker>
+          </div>
+          <div class="output">
+            <label>Selected:</label>
+            {{ formatDateTime(dateTimeValue) }}
+          </div>
+        </div>
+
+        <!-- Time Picker (12-hour) -->
+        <div class="demo-card">
+          <h3>Time Picker (12-hour)</h3>
+          <p>Time only with AM/PM selector.</p>
+          <div class="picker-container">
+            <ios-datepicker
+              v-model="timeValue"
+              mode="time"
+              :use24Hour="false"
+              :confirm-text="''"
+              :cancel-text="''"
+            ></ios-datepicker>
+          </div>
+          <div class="output">
+            <label>Selected:</label>
+            {{ formatTime12(timeValue) }}
+          </div>
+        </div>
+
+        <!-- Year-Month Picker -->
+        <div class="demo-card">
+          <h3>Year-Month Picker</h3>
+          <p>Select only year and month.</p>
+          <div class="picker-container">
+            <ios-datepicker
+              v-model="yearMonthValue"
+              mode="year-month"
+              :confirm-text="''"
+              :cancel-text="''"
+            ></ios-datepicker>
+          </div>
+          <div class="output">
+            <label>Selected:</label>
+            {{ formatYearMonth(yearMonthValue) }}
+          </div>
+        </div>
+
+        <!-- Dark Theme -->
+        <div class="demo-card dark">
+          <h3>Dark Theme</h3>
+          <p>Built-in dark theme support.</p>
+          <div class="picker-container">
+            <ios-datepicker
+              v-model="darkDate"
+              theme="dark"
+              :confirm-text="''"
+              :cancel-text="''"
+            ></ios-datepicker>
+          </div>
+          <div class="output">
+            <label>Selected:</label>
+            {{ formatDate(darkDate) }}
+          </div>
+        </div>
+
+        <!-- Custom Theme -->
+        <div class="demo-card">
+          <h3>Custom Theme (Green)</h3>
+          <p>Customized with CSS variables.</p>
+          <div class="picker-container">
+            <ios-datepicker
+              v-model="customDate"
+              class="custom-theme-picker"
+              :confirm-text="''"
+              :cancel-text="''"
+            ></ios-datepicker>
+          </div>
+          <div class="output">
+            <label>Selected:</label>
+            {{ formatDate(customDate) }}
+          </div>
+        </div>
+
+        <!-- With Constraints -->
+        <div class="demo-card">
+          <h3>Min/Max Constraints</h3>
+          <p>Limited to dates in 2024.</p>
+          <div class="picker-container">
+            <ios-datepicker
+              v-model="constrainedDate"
+              :min="minDate"
+              :max="maxDate"
+              :confirm-text="''"
+              :cancel-text="''"
+            ></ios-datepicker>
+          </div>
+          <div class="output">
+            <label>Selected:</label>
+            {{ formatDate(constrainedDate) }}
+          </div>
+        </div>
+
+        <!-- Minute Step -->
+        <div class="demo-card">
+          <h3>15-Minute Intervals</h3>
+          <p>Time picker with 15-minute steps.</p>
+          <div class="picker-container">
+            <ios-datepicker
+              v-model="stepTime"
+              mode="time"
+              :minuteStep="15"
+              :confirm-text="''"
+              :cancel-text="''"
+            ></ios-datepicker>
+          </div>
+          <div class="output">
+            <label>Selected:</label>
+            {{ formatTime24(stepTime) }}
+          </div>
+        </div>
+
+        <!-- Localized (Spanish) -->
+        <div class="demo-card">
+          <h3>Localized (Spanish)</h3>
+          <p>Month names in Spanish.</p>
+          <div class="picker-container">
+            <ios-datepicker
+              v-model="spanishDate"
+              locale="es"
+              :confirm-text="''"
+              :cancel-text="''"
+            ></ios-datepicker>
+          </div>
+          <div class="output">
+            <label>Seleccionado:</label>
+            {{ formatDateLocale(spanishDate, 'es') }}
+          </div>
+        </div>
+
+        <!-- With Action Buttons -->
+        <div class="demo-card">
+          <h3>With Action Buttons</h3>
+          <p>Confirm and cancel buttons with events.</p>
+          <div class="picker-container">
+            <ios-datepicker
+              v-model="actionDate"
+              confirm-text="Done"
+              cancel-text="Clear"
+              @confirm="onConfirm"
+              @cancel="onCancel"
+            ></ios-datepicker>
+          </div>
+          <div class="output">
+            <label>Last Action:</label>
+            {{ lastAction }}
+          </div>
+        </div>
+
+        <!-- Programmatic Control -->
+        <div class="demo-card">
+          <h3>Programmatic Control</h3>
+          <p>Control picker via ref methods.</p>
+          <div class="picker-container">
+            <ios-datepicker
+              ref="controlledPicker"
+              v-model="controlledDate"
+              :confirm-text="''"
+              :cancel-text="''"
+            ></ios-datepicker>
+          </div>
+          <div class="output">
+            <label>Selected:</label>
+            {{ formatDate(controlledDate) }}
+          </div>
+          <div class="button-row">
+            <button class="btn btn-primary" @click="goToToday">Today</button>
+            <button class="btn btn-secondary" @click="goToNewYear">New Year</button>
+            <button class="btn btn-secondary" @click="resetPicker">Reset</button>
+          </div>
+        </div>
+
+        <!-- Disabled State -->
+        <div class="demo-card">
+          <h3>Disabled State</h3>
+          <p>Picker in disabled mode.</p>
+          <div class="picker-container">
+            <ios-datepicker
+              v-model="disabledDate"
+              disabled
+              :confirm-text="''"
+              :cancel-text="''"
+            ></ios-datepicker>
+          </div>
+          <div class="output">
+            <label>Selected:</label>
+            {{ formatDate(disabledDate) }}
+          </div>
+        </div>
+      </div>
+
+      <footer>
+        <p>
+          Made with ❤️ by <a href="https://github.com/wlvck">Zhumagali Kanagat</a> |
+          <a href="https://github.com/wlvck/vue3-ios-datepicker">GitHub</a> |
+          <a href="https://www.npmjs.com/package/vue3-ios-datepicker">npm</a>
+        </p>
+      </footer>
+    </div>
+  </div>
+
+  <!-- Vue 3 -->
+  <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+
+  <!-- Load built library -->
+  <script src="../dist/vue3-ios-datepicker.umd.js"></script>
+  <link rel="stylesheet" href="../dist/vue3-ios-datepicker.css">
+
+  <script>
+    const { createApp, ref } = Vue
+
+    const app = createApp({
+      setup() {
+        // Demo values
+        const basicDate = ref(new Date())
+        const dateTimeValue = ref(new Date())
+        const timeValue = ref(new Date())
+        const yearMonthValue = ref(new Date())
+        const darkDate = ref(new Date())
+        const customDate = ref(new Date())
+        const constrainedDate = ref(new Date(2024, 5, 15))
+        const stepTime = ref(new Date())
+        const spanishDate = ref(new Date())
+        const actionDate = ref(new Date())
+        const controlledDate = ref(new Date())
+        const disabledDate = ref(new Date())
+
+        // Constraints
+        const minDate = new Date(2024, 0, 1)
+        const maxDate = new Date(2024, 11, 31)
+
+        // Action tracking
+        const lastAction = ref('None')
+
+        // Ref for programmatic control
+        const controlledPicker = ref(null)
+
+        // Format helpers
+        const formatDate = (date) => {
+          if (!date) return 'No date selected'
+          return date.toLocaleDateString('en-US', {
+            weekday: 'short',
+            year: 'numeric',
+            month: 'short',
+            day: 'numeric'
+          })
+        }
+
+        const formatDateTime = (date) => {
+          if (!date) return 'No date selected'
+          return date.toLocaleString('en-US', {
+            year: 'numeric',
+            month: 'short',
+            day: 'numeric',
+            hour: '2-digit',
+            minute: '2-digit',
+            hour12: false
+          })
+        }
+
+        const formatTime12 = (date) => {
+          if (!date) return 'No time selected'
+          return date.toLocaleTimeString('en-US', {
+            hour: 'numeric',
+            minute: '2-digit',
+            hour12: true
+          })
+        }
+
+        const formatTime24 = (date) => {
+          if (!date) return 'No time selected'
+          return date.toLocaleTimeString('en-US', {
+            hour: '2-digit',
+            minute: '2-digit',
+            hour12: false
+          })
+        }
+
+        const formatYearMonth = (date) => {
+          if (!date) return 'No date selected'
+          return date.toLocaleDateString('en-US', {
+            year: 'numeric',
+            month: 'long'
+          })
+        }
+
+        const formatDateLocale = (date, locale) => {
+          if (!date) return 'No date selected'
+          return date.toLocaleDateString(locale, {
+            weekday: 'long',
+            year: 'numeric',
+            month: 'long',
+            day: 'numeric'
+          })
+        }
+
+        // Event handlers
+        const onConfirm = (date) => {
+          lastAction.value = `Confirmed: ${formatDate(date)}`
+        }
+
+        const onCancel = () => {
+          lastAction.value = 'Cancelled'
+          actionDate.value = new Date()
+        }
+
+        // Programmatic control
+        const goToToday = () => {
+          controlledPicker.value?.selectDate(new Date())
+        }
+
+        const goToNewYear = () => {
+          controlledPicker.value?.selectDate(new Date(2025, 0, 1))
+        }
+
+        const resetPicker = () => {
+          controlledPicker.value?.reset()
+        }
+
+        return {
+          // Values
+          basicDate,
+          dateTimeValue,
+          timeValue,
+          yearMonthValue,
+          darkDate,
+          customDate,
+          constrainedDate,
+          stepTime,
+          spanishDate,
+          actionDate,
+          controlledDate,
+          disabledDate,
+          minDate,
+          maxDate,
+          lastAction,
+          controlledPicker,
+
+          // Methods
+          formatDate,
+          formatDateTime,
+          formatTime12,
+          formatTime24,
+          formatYearMonth,
+          formatDateLocale,
+          onConfirm,
+          onCancel,
+          goToToday,
+          goToNewYear,
+          resetPicker,
+        }
+      }
+    })
+
+    // Register the component (UMD build exports default at .default)
+    app.use(Vue3IosDatepicker.default || Vue3IosDatepicker)
+    app.mount('#app')
+  </script>
+</body>
+</html>
